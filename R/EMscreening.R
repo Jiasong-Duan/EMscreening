@@ -12,7 +12,7 @@ joint.out.all=rep(NA, p)
 
 ### step 1 :screening each cg
 for (i in 1:p){
-  tempdata <- cbind(X=Phenotype[,1],Y=Phenotype[,2], M=as.vector(DNAm[i,]))
+  tempdata <- cbind(X=as.matrix(Phenotype[,1]),Y=as.matrix(Phenotype[,2]), M=as.matrix(t(DNAm[i,])))
   colnames(tempdata)=c("X","Y","M")
 if (Continuous==TRUE) {
  joint.out.all[i]=lm_indirect_jointest(tempdata)
@@ -30,7 +30,7 @@ for (i in 1:p){
   if (joint.out.all[i] >=Cutoff.Joint) {
     Final_joint[i]=0
   }else{
-    temp<- cbind(X=Phenotype[,1],Y=Phenotype[,2], M=as.vector(DNAm[i,]))
+    temp<- cbind(X=as.matrix(Phenotype[,1]),Y=as.matrix(Phenotype[,2]), M=as.matrix(t(DNAm[i,])))
     colnames(temp)=c("X","Y","M")
 
     sig_path=rep(NA,Iterations)
@@ -78,7 +78,7 @@ Results<-matrix(NA,nrow=No.selected,ncol=16)
 rownames(Results)<-rownames(selected)
 colnames(Results)<-c("alpha*beta est"," alpha*beta se","alpha*beta z","alpha*beta pvalue","alpha est"," alpha se","alpha z","alpha pvalue","beta est","beta se","beta z","beta pvalue","total est","total se","total z","total pvalue")
 for (i in 1:No.selected){
-  tempdata <- cbind(X=Phenotype[,1],Y=Phenotype[,2], M=as.vector(DNAm_selected[i,]))
+  tempdata <- cbind(X=as.matrix(Phenotype[,1]),Y=as.matrix(Phenotype[,2]), M=as.matrix(t(DNAm[i,])))
   colnames(tempdata)=c("X","Y","M")
   tempdata<-as.data.frame(tempdata)
   model <- ' # direct effect
@@ -91,9 +91,9 @@ for (i in 1:No.selected){
              total := c + (a*b)
          '
   if (Continuous==TRUE) {
-    fit <- sem(model, data = tempdata)
+    fit <- lavaan::sem(model, data = tempdata)
   }else{
-    fit <- sem(model, data = tempdata, ordered ="Y")
+    fit <- lavaan::sem(model, data = tempdata, ordered ="Y")
   }
  Estimate=as.matrix(lavaan::parameterEstimates(fit))
  Results[i,1:4]<-Estimate[Estimate[,c("label")]=="ab",5:8]

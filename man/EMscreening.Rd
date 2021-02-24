@@ -53,6 +53,7 @@ In the second step, samples for each DNA methylation sites selected from step 1 
 \item{Final_results}{The data matrix containing statistics for the selected mediators. If no mediators selected, "No mediators identified from the joint screening method" will be shown. If there are mediators selected, in the output, the column 1 represents the mediators' names; The column 2 shows the relative frequency of pass the screening; The column 3-6 are the estimated parameters, standard errors, z-values, and p-values for the indirect effect of the tested DNA methylation site and exposure on outcome; The column 7-10 are the estimated parameters, standard errors, z-values, and p-values for the effect of the tested exposure on the tested DNA methylation site;. The column 11-14 are the estimated parameters, standard errors, z-values, and p-values for the direct effect of the tested DNA methylation site on outcome; The column 15-18 are the estimated parameters, standard errors, z-values, and p-values for the total effect (indirect+ direct) of the tested DNA methylation site and exposure on outcome.}
 }
 \references{
+Lu Xie, A joint approach to screen high dimensional mediators in epigenetic data, technical report. Division of Epidemiology, Biostatistics, and Environmental Health, University of Memphis, Memphis, TN.
 %% ~put references to the literature/web site here ~
 }
 \author{
@@ -69,89 +70,22 @@ In the second step, samples for each DNA methylation sites selected from step 1 
 }
 \examples{
 library(EMscreening)
-##Simulate data
-##Assign parameters to generate data
-n=200 # sample size
-p <- 500 # the number of mediators
-# the regression coefficients alpha (exposure --> mediators)
-alpha <- rep(0, p)
-# the regression coefficients beta (mediators --> outcome)
-beta1 <- rep(0, p)
-# for continuous outcome
-beta2 <- rep(0, p)
 
-# for binary outcome
-# the first four markers are true mediators
-alpha[1:4] <- c(0.45,0.5,0.6,0.7)
-beta1[1:4] <- c(0.55,0.6,0.65,0.7)
-beta2[1:4] <- c(1.45,1.5,1.55,1.6)
-# these are not true mediators
-alpha[7:8] <- 0.5
-beta1[5:6] <- 0.8
-beta2[5:6] <- 1.7
+#Example data are attached in the package
+#Phenotype data
+dim(PhenotypeExample)
+class(PhenotypeExample)
+head(PhenotypeExample)
 
-##Continuous outcome
-##Phenotype data
-set.seed(1000)
-ck <- runif(p, 0, 2)
-X <- rnorm(n, mean = 0, sd = 1.5)
-  e <- rnorm(n, 0, 1.2)
-  M<- ck[i] + X * alpha[i] + e
-  E <- rnorm(n, 0, 1)
-  Y <- 0.5 + 0.5*X+ beta1[i]*M + E
-  PHENOTYPEdata=cbind(X,Y)
-  colnames(PHENOTYPEdata)=c(Exposure,Response)
-PHENOTYPEdata
-##DNAm data
-DNAmdata=matrix(nrow=p,ncol=n)
-for (j in 1:p){
-set.seed(1000*j)
-ck <- runif(p, 0, 2)
-X <- rnorm(n, mean = 0, sd = 1.5)
-  e <- rnorm(n, 0, 1.2)
-  M<- ck[i] + X * alpha[i] + e
-  DNAmdata[j,]=M
-}
-rownames(DNAmdata)=paste("M",seq(1,p),sep="")
-dim(PHENOTYPEdata)
-dim(DNAmdata)
-##Run the screening
-TryContinuous=EMscreening(PHENOTYPEdata,DNAmdata)
-##Ease the criteria
-TryContinuous2=EMscreening(PHENOTYPEdata,DNAmdata,Continuous=TRUE,Cutoff.Joint=0.1,Iterations=100,Train.Pvalue=0.8,Test.Pvalue=0.8,Percentage=0.01)
+#DNA methylation data
+dim(DNAmExample)
+class(DNAmExample)
+head(DNAmExample)
 
+#Response is binary
+BinaryOutcome=EMscreening(PHENOTYPEdata,DNAmdata,Continuous=FALSE,Cutoff.Joint=0.1,Iterations=100,Train.Pvalue=0.05,Test.Pvalue=0.05,Percentage=0.01)
 
-##Binary outcome
-##Phenotype data
-set.seed(1000)
-ck <- runif(p, 0, 2)
-X <- rnorm(n, mean = 0, sd = 1.5)
-e <- rnorm(n, 0, 1.2)
-M<- ck[i] + X * alpha[i] + e
-E <- rnorm(n, 0, 1)
-Y <- 0.5 + 0.5*X+ beta1[i]*M + E
-Y <- ifelse (Y>quantile(Y,0.15),0, 1)
-PHENOTYPEdata=cbind(X,Y)
-colnames(PHENOTYPEdata)=c(Exposure,Response)
-PHENOTYPEdata
-##DNAm data
-DNAmdata=matrix(nrow=p,ncol=n)
-for (j in 1:p){
-  set.seed(1000*j)
-  ck <- runif(p, 0, 2)
-  X <- rnorm(n, mean = 0, sd = 1.5)
-  e <- rnorm(n, 0, 1.2)
-  M<- ck[i] + X * alpha[i] + e
-  DNAmdata[j,]=M
-}
-rownames(DNAmdata)=paste("M",seq(1,p),sep="")
-dim(PHENOTYPEdata)
-dim(DNAmdata)
-##Run the screening
-TryBinary=EMscreening(PHENOTYPEdata,DNAmdata)
-##Ease the criteria
-TryBinary2=EMscreening(PHENOTYPEdata,DNAmdata,Continuous=TRUE,Cutoff.Joint=0.1,Iterations=100,Train.Pvalue=0.8,Test.Pvalue=0.8,Percentage=0.01)
-
+BinaryOutcome
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
