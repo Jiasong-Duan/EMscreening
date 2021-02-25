@@ -12,7 +12,7 @@ joint.out.all=rep(NA, p)
 
 ### step 1 :screening each cg
 for (i in 1:p){
-  tempdata <- cbind(X=matrix(Phenotype[,1],ncol=1),Y=matrix(Phenotype[,2],ncol=1), M=matrix(DNAmdata[i, ],ncol=1))
+  tempdata <- cbind(X=matrix(Phenotype[,1],ncol=1),Y=matrix(Phenotype[,2],ncol=1), M=matrix(DNAm[i, ],ncol=1))
   colnames(tempdata)=c("X","Y","M")
 if (Continuous==TRUE) {
  joint.out.all[i]=lm_indirect_jointest(tempdata)
@@ -30,7 +30,7 @@ for (i in 1:p){
   if (joint.out.all[i] >=Cutoff.Joint) {
     Final_joint[i]=0
   }else{
-    temp<- cbind(X=matrix(Phenotype[,1],ncol=1),Y=matrix(Phenotype[,2],ncol=1), M=matrix(DNAmdata[i, ],ncol=1))
+    temp<- cbind(X=matrix(Phenotype[,1],ncol=1),Y=matrix(Phenotype[,2],ncol=1), M=matrix(DNAm[i, ],ncol=1))
     colnames(temp)=c("X","Y","M")
 
     sig_path=rep(NA,Iterations)
@@ -78,7 +78,7 @@ Results<-matrix(NA,nrow=No.selected,ncol=16)
 rownames(Results)<-rownames(selected)
 colnames(Results)<-c("alpha*beta est"," alpha*beta se","alpha*beta z","alpha*beta pvalue","alpha est"," alpha se","alpha z","alpha pvalue","beta est","beta se","beta z","beta pvalue","total est","total se","total z","total pvalue")
 for (i in 1:No.selected){
-  tempdata <- cbind(X=matrix(Phenotype[,1],ncol=1),Y=matrix(Phenotype[,2],ncol=1), M=matrix(DNAmdata[i, ],ncol=1))
+  tempdata <- cbind(X=matrix(Phenotype[,1],ncol=1),Y=matrix(Phenotype[,2],ncol=1), M=matrix(DNAm[i, ],ncol=1))
   colnames(tempdata)=c("X","Y","M")
   tempdata<-as.data.frame(tempdata)
   model <- ' # direct effect
