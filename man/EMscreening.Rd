@@ -83,7 +83,7 @@ class(DNAmExample)
 head(DNAmExample)
 
 #Response is binary
-BinaryOutcome=EMscreening(PHENOTYPEdata,DNAmdata,Continuous=FALSE,Cutoff.Joint=0.1,Iterations=100,Train.Pvalue=0.05,Test.Pvalue=0.05,Percentage=0.01)
+BinaryOutcome=EMscreening(PhenotypeExample,DNAmExample,Continuous=FALSE,Cutoff.Joint=0.1,Iterations=100,Train.Pvalue=0.05,Test.Pvalue=0.05,Percentage=0.01)
 
 BinaryOutcome
 }
