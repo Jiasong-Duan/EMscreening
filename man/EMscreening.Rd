@@ -43,7 +43,7 @@ The cutoff of the selected times of a mediator in step 2 over the defined iterat
 %%  ~~ If necessary, more details than the description above ~~
 The whole screening process consists of two dependent steps. \cr
 In the first step, every potential mediator is screened and selected based on its indirect joint effect with a exposure on the outcome. \cr
-In the second step, samples for each DNA methylation sites selected from step 1 are split to traning part and testing part. For one site, its effect on the outcome is evaluated again by using the two seperate data. If the tested effects pass the significance levels in both traning data and testing data, the tested site is selected. This process is called one iteration. Every DNA methylation site needs to be tested for a number of iterations. Once the percentage of being selected of the measured site pass the set cutoff, it is eventually screened out as a mediator for the interested outcome.}
+In the second step, samples for each DNA methylation sites selected from step 1 are split to traning part and testing part at a ratio of 2/3: 1/3. For one site, its effect on the outcome is evaluated again by using the two seperate data. If the tested effects pass the significance levels in both traning data and testing data, the tested site is selected. This process is called one iteration. Every DNA methylation site needs to be tested for a number of iterations. Once the percentage of being selected of the measured site pass the set cutoff, it is eventually screened out as a mediator for the interested outcome.}
 \value{
 %%  ~Describe the value returned
 %%  If it is a LIST, use
