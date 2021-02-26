@@ -30,8 +30,8 @@ for (i in 1:p){
   if (joint.out.all[i] >=Cutoff.Joint) {
     Final_joint[i]=0
   }else{
-    tempdata <- cbind(X=as.vector(Phenotype[,1]),Y=as.vector(Phenotype[,2]), M=as.vector(t(DNAm[i, ])))
-    colnames(tempdata)=c("X","Y","M")
+    temp <- cbind(X=as.vector(Phenotype[,1]),Y=as.vector(Phenotype[,2]), M=as.vector(t(DNAm[i, ])))
+    colnames(temp)=c("X","Y","M")
 
     sig_path=rep(NA,Iterations)
     for (k in 1:Iterations) {
