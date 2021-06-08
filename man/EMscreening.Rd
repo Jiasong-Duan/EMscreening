@@ -69,23 +69,41 @@ Lu Xie, A joint approach to screen high dimensional mediators in epigenetic data
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
+#example of four true mediators
 library(EMscreening)
 
-#Example data are attached in the package
-#Phenotype data
-dim(PhenotypeExample)
-class(PhenotypeExample)
-head(PhenotypeExample)
+#Simulate data
+n=200 # sample size
+p <- 500 # the number of mediators
+alpha <- rep(0, p)
+beta  <- rep(0, p)
+alpha[1:8]=c(0.65,0.50, 0.60,	0.70,	0,	0,	0.5,	0.5)
+beta[1:8]=c(0.95,0.6,0.65,0.7,0.8,0.8,0,0)
+set.seed(1234)
+DNAmdataExample=matrix(nrow=p,ncol=n)
+X <- rnorm(n, mean = 0, sd = 1.5)
 
-#DNA methylation data
-dim(DNAmExample)
-class(DNAmExample)
-head(DNAmExample)
+for (j in 1:p){
+  set.seed(1000*j)
+  ck <- runif(1, 0, 2)
+  e <- rnorm(n, 0, 1)
+  M<- ck + X * alpha[j] + e
+  DNAmdataExample[j,]=M
+}
+E <- rnorm(n, 0, 1)
 
-#Response is binary
-BinaryOutcome=EMscreening(PhenotypeExample,DNAmExample,Continuous=FALSE,Cutoff.Joint=0.1,Iterations=100,Train.Pvalue=0.05,Test.Pvalue=0.05,Percentage=0.01)
+Y <- 0.5 + 0.5*X+ t(DNAmdataExample)%*%beta+ E
+X<-as.matrix(X)
+PHENOTYPEdataExample=cbind(X,Y)
 
-BinaryOutcome
+colnames(PHENOTYPEdataExample)=c("Exposure","Response")
+
+rownames(DNAmdataExample)=paste("M",seq(1,p),sep="")
+
+#Response is continuous
+continous2=EMscreening(PHENOTYPEdataExample,DNAmdataExample,Continuous=TRUE,Cutoff.Joint=0.1,Iterations=100,Train.Pvalue=0.05,Test.Pvalue=0.05,Percentage=0.01)
+continous2
+
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
